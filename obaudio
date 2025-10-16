@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Funky Credentials – Badges audio</title>
+  <style>
+    :root { --bg:#0f172a; --card:#111827; --text:#ffffff; --muted:#94a3b8; --accent:#38bdf8; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+      color: var(--text); background: radial-gradient(1200px 800px at 80% -10%, #1f2937 0%, #0b1224 50%, var(--bg) 100%);
+      display: grid; place-items: center; padding: 32px;
+    }
+    .wrap { width: min(1040px, 94vw); }
+    h1.title { margin: 0 0 16px; font-size: clamp(1.5rem, 3vw, 2rem); color: #ffffff; letter-spacing:.02em; text-align:center; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    @media (min-width: 700px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    .card { background: linear-gradient(180deg, #0b1224 0%, #0a0f1d 100%); border: 1px solid #1f2937; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,.5); padding: 18px; text-align: center; }
+    .badge-btn { border: none; background: none; cursor: pointer; padding: 0; }
+    .badge-img { width: 180px; height: 180px; border-radius: 18px; border: 1px solid #1f2937; background: #0f172a; display:block; margin: 0 auto; transition: transform .1s ease; }
+    .badge-btn:active .badge-img { transform: scale(.97); }
+    .name { margin: 12px 0 0; font-size: 1rem; color: var(--muted); }
+    .hint { color: var(--muted); font-size:.85rem; margin-top:10px; }
+    .link { display:inline-block; margin-top:12px; color: var(--accent); text-decoration:none; font-size:.9rem; }
+    .link:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 class="title">Funky Credentials</h1>
+
+    <div class="grid" id="grid">
+      <!-- Badge 1 -->
+      <div class="card">
+        <button class="badge-btn" aria-label="Lire le son du badge 1" data-audio="https://radiobadges.openrecognition.org/upload/top10/extraits/68eb3dd1b98038.44707972.mp3">
+          <img class="badge-img" src="https://media.orcapods.org/achievement-9da456bd-5dc3-413a-94bb-d0798b65a6d1/raw-image.png" alt="Badge musical 1" />
+        </button>
+        <div class="name">Badge musical #1</div>
+        <audio preload="none"></audio>
+        <a class="link" href="https://lre.orcapods.org/achievements/9da456bd-5dc3-413a-94bb-d0798b65a6d1" target="_blank" rel="noopener">Accéder au badge sur la place de la reconnaissance</a>
+      </div>
+
+      <!-- Badge 2 -->
+      <div class="card">
+        <button class="badge-btn" aria-label="Lire le son du badge 2" data-audio="REMPPLACEZ_PAR_URL_MP3_2">
+          <img class="badge-img" src="REMPLACEZ_PAR_URL_IMAGE_2" alt="Badge musical 2" />
+        </button>
+        <div class="name">Badge musical #2</div>
+        <audio preload="none"></audio>
+      </div>
+
+      <!-- Badge 3 -->
+      <div class="card">
+        <button class="badge-btn" aria-label="Lire le son du badge 3" data-audio="REMPLACEZ_PAR_URL_MP3_3">
+          <img class="badge-img" src="REMPLACEZ_PAR_URL_IMAGE_3" alt="Badge musical 3" />
+        </button>
+        <div class="name">Badge musical #3</div>
+        <audio preload="none"></audio>
+      </div>
+    </div>
+
+    <p class="hint" style="text-align:center">Cliquez sur un badge pour lancer/mettre en pause son audio.</p>
+  </div>
+
+  <script>
+    // Utilitaire pour deviner le type MIME d'après l'extension
+    const EXT_MIME = { mp3:'audio/mpeg', mpeg:'audio/mpeg', wav:'audio/wav', ogg:'audio/ogg', oga:'audio/ogg', m4a:'audio/mp4', aac:'audio/aac', webm:'audio/webm' };
+    const guessMime = u => { try { const m = new URL(u, document.baseURI).pathname.toLowerCase().match(/\.([a-z0-9]+)$/); return m ? (EXT_MIME[m[1]]||'') : ''; } catch { return ''; } };
+
+    // Associe chaque bouton d'image à son <audio>
+    document.querySelectorAll('.card').forEach(card => {
+      const btn = card.querySelector('.badge-btn');
+      const audio = card.querySelector('audio');
+      const url = btn?.getAttribute('data-audio') || '';
+
+      // Prépare la source pour ce badge
+      function prepare(url) {
+        audio.innerHTML = '';
+        const s = document.createElement('source');
+        s.src = url; const type = guessMime(url); if (type) s.type = type;
+        audio.appendChild(s); audio.load();
+      }
+      if (url) prepare(url);
+
+      // Toggle play/pause sur clic image
+      btn?.addEventListener('click', async () => {
+        try {
+          if (audio.paused) { await audio.play(); } else { audio.pause(); }
+        } catch (e) { alert("Impossible de lire l'audio."); console.error(e); }
+      });
+
+      // Reset quand terminé
+      audio.addEventListener('ended', () => { audio.currentTime = 0; });
+    });
+  </script>
+</body>
+</html>
