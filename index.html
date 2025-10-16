@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Funky Credentials – Badge audio</title>
   <style>
-    :root { --bg:#0f172a; --card:#111827; --text:#ffffff; --muted:#94a3b8; }
+    :root { --bg:#0f172a; --card:#111827; --text:#ffffff; --muted:#94a3b8; --accent:#38bdf8; }
     * { box-sizing: border-box; }
     html, body { height: 100%; }
     body {
@@ -27,6 +27,8 @@
     .badge-img { width: 180px; height: 180px; border-radius: 20px; border: 1px solid #1f2937; background: #0f172a; display:block; margin: 0 auto; transition: transform .1s ease; }
     .badge-btn:active .badge-img { transform: scale(.97); }
     .hint { color: var(--muted); font-size:.9rem; margin-top:14px; }
+    .link { display:inline-block; margin-top:18px; color: var(--accent); text-decoration:none; font-size:.95rem; }
+    .link:hover { text-decoration:underline; }
   </style>
 </head>
 <body>
@@ -42,6 +44,11 @@
     <audio id="player" preload="none"></audio>
 
     <p class="hint">Cliquez sur le badge pour lancer ou mettre en pause l'audio.</p>
+
+    <!-- Lien vers la demande de badge -->
+    <a class="link" href="https://lre.orcapods.org/achievements/9da456bd-5dc3-413a-94bb-d0798b65a6d1" target="_blank" rel="noopener noreferrer">
+      Accéder au badge sur la place de la reconnaissance
+    </a>
   </div>
 
   <script>
